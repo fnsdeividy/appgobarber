@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
+import React, { useEffect, useRef, useImperativeHandle, forwardRef, useState, useCallback } from "react";
 import { useField } from "@unform/core";
 import { TextInputProps } from "react-native";
-import Icon from 'react-native-vector-icons/Feather';
-import { Container, TextInput } from "./styles";
+
+import { Container, TextInput, Icon } from "./styles";
 
 interface InputProps extends TextInputProps {
     name:string;
@@ -22,6 +22,17 @@ const Input: React.ForwardRefRenderFunction<InputRef,InputProps> = ({ name, icon
     const inputElementRef = useRef<any>(null)
     const { registerField, defaultValue, fieldName, error } = useField(name)
     const inputValueRef = useRef<InputValueReference>({value:defaultValue})
+    const [isFocused, setIsFocused] = useState(false)
+    const [isFilled, setIsFilled] = useState(false)
+
+    const handleInputFocus = useCallback(() => {
+        setIsFocused(true)
+    },[])
+    const handleInputBlur = useCallback(() => {
+        setIsFocused(false)
+
+        setIsFilled(!!inputValueRef.current.value)
+    },[])
 
     useImperativeHandle(ref,() => ({
         focus() {
@@ -46,17 +57,23 @@ const Input: React.ForwardRefRenderFunction<InputRef,InputProps> = ({ name, icon
     }, [fieldName, registerField])
 
     return (
-        <Container>
-            <Icon 
+        <Container
+        isFocused={isFocused}
+        >
+            <Icon
+            color={isFocused || isFilled ? '#ff9000':'#666360'}
+            
             name={icon} 
             size={20} 
-            color='#666360'/>
+            />
         
             <TextInput
             ref={inputElementRef}
             onChangeText={(value) => {
                 inputValueRef.current.value = value
             }}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
             defaultValue={defaultValue}
             keyboardAppearance="dark"
             placeholderTextColor='#666360'
