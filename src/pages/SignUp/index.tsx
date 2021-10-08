@@ -22,6 +22,7 @@ import logoImg from '../../assets/logo.png'
 import Input from '../../components/Input'
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErrors';
+import api from '../../services/api'
 import { ScrollView } from 'react-native-gesture-handler';
 
 
@@ -54,9 +55,12 @@ const SignUp:React.FC = () => {
                  abortEarly:false,
             })
 
-            //await api.post('/users', data);
+            await api.post('/users', data);
 
-            //history.push('/')
+            Alert.alert('Cadastro realizado com sucesso!', 
+            'Você já pode realizar o login com sucesso')
+
+            navigation.goBack()
            
           
         } catch (err:any)  {
@@ -73,7 +77,7 @@ const SignUp:React.FC = () => {
                     'Ocorreu um erro no cadastro. Tente novamente'
                 )*/
             }
-        }, []);
+        }, [navigation]);
     
 
     return (

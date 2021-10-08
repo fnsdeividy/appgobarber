@@ -13,11 +13,13 @@ import  Icon  from 'react-native-vector-icons/Feather';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErrors'
+
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import logoImg from '../../assets/logo.png';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useAuth } from '../../hooks/Auth'
 
 
 
@@ -33,6 +35,8 @@ const SignIn:React.FC = () => {
     const formRef = useRef<FormHandles>(null);
     const passwordInputRef = useRef<TextInput>(null)
     const navigation = useNavigation()
+    const { signIn, user } = useAuth()
+    console.log(user)
     const handleSignIn= useCallback( async (data:SignInFormData)=> {
         try {
 
@@ -50,10 +54,10 @@ const SignIn:React.FC = () => {
                  abortEarly:false,
             })
 
-            //await signIn({
-            //    email:data.email,
-            //    password:data.password
-           // })
+            await signIn({
+               email:data.email,
+               password:data.password
+            })
            
             //history.push('/dashboard');
 
@@ -73,7 +77,7 @@ const SignIn:React.FC = () => {
 
           
         }
-    }, []);
+    }, [signIn]);
     
     return (
         <>
