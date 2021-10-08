@@ -59,15 +59,16 @@ const Input: React.ForwardRefRenderFunction<InputRef,InputProps> = ({ name, icon
     return (
         <Container
         isFocused={isFocused}
+        isErrored={!!error}
         >
             <Icon
             color={isFocused || isFilled ? '#ff9000':'#666360'}
-            
             name={icon} 
             size={20} 
             />
         
             <TextInput
+            
             ref={inputElementRef}
             onChangeText={(value) => {
                 inputValueRef.current.value = value
